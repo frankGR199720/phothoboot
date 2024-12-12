@@ -1,0 +1,9 @@
+fpdf==1.7.2
+numpy==2.2.0
+opencv-contrib-python==4.10.0.84
+pynput==1.7.7
+pyserial==3.5
+pywin32==308
+six==1.17.0
+win-api==0.0.0
+win32printing==0.1.3
