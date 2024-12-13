@@ -16,10 +16,23 @@ direccion_de_seciones_guardadas = "seciones guardadas/"
 nombre_secion = dt.datetime.now().strftime('secion %d-%m-%y-%H-%M')
 direccion_de_seciones_en_album = "album de fotos/carpeta "
 
+def pulsa(tecla):
+	pass
+
+def suelta(tecla):
+	if tecla == kb.KeyCode.from_char('q'):
+            print("se puso tecla para cerrar metodos ")
+            exit()
+
 class Panel_control():
     def init_arduino ():
-        com = input("pon el puerto com del arduino: ")
+        global arduino
+        try:
+            com = input("pon el puerto com del arduino: ")
+            arduino = serial.Serial(f"COM{com}", 9600)
 
+        except Exception as cabra:
+            print(cabra)
         return com
 
     def creacion_de_evento ():
@@ -609,47 +622,12 @@ class Animaciones:
 
 
 
-def pulsa(tecla):
-	pass
 
-def suelta(tecla):
-	if tecla == kb.KeyCode.from_char('q'):
-            print("se puso tecla para cerrar metodos ")
-            # if os.listdir("album de fotos/"):
-            #     carpeta = 1 
-            #     while True:
-            #         isclosed = 0
-            #         if not os.path.exists(direccion_de_seciones_guardadas + nombre_secion):
-            #             os.makedirs(direccion_de_seciones_guardadas + nombre_secion)
-            #             print("carpeta creada: ", direccion_de_seciones_guardadas + nombre_secion)
-            
-            #             while True:
-            #                 if os.path.exists(direccion_de_seciones_en_album + str(carpeta)):
-            #                     print("carpeta existente")
-                                
-            #                     if os.listdir(direccion_de_seciones_en_album + str(carpeta)):
-            #                         sh.move(direccion_de_seciones_en_album + str(carpeta), direccion_de_seciones_guardadas + nombre_secion)
-            #                         carpeta =carpeta+1
-
-            #                     else:
-            #                         print("carpeta vacia... borrar directorio")
-            #                         os.rmdir(direccion_de_seciones_en_album + str(carpeta))
-                         
-
-            #                 else:
-            #                     print("no existe la carpeta ")
-            #                     isclosed = 1
-            #                     break
         
-
-            #         if isclosed:
-            #             break
-        
-            exit()
 
 if __name__ == "__main__":
     os.system("cls")
-    arduino = serial.Serial(f"COM{Panel_control.init_arduino()}", 9600)
+    Panel_control.init_arduino()
     #--------- panel de control--------------
     
     
