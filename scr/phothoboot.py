@@ -1,4 +1,5 @@
 import cv2                                  #pip install opencv-contrib-python
+import cv2.data
 import fpdf                                 #pip install fpdf
 import random                               
 import win32api                             #pip install win-api
@@ -12,17 +13,9 @@ import shutil as sh
 import serial
 import time
 
-direccion_de_seciones_guardadas = "seciones guardadas/"
-nombre_secion = dt.datetime.now().strftime('secion %d-%m-%y-%H-%M')
-direccion_de_seciones_en_album = "album de fotos/carpeta "
 
-def pulsa(tecla):
-	pass
 
-def suelta(tecla):
-	if tecla == kb.KeyCode.from_char('q'):
-            print("se puso tecla para cerrar metodos ")
-            exit()
+
 
 class Panel_control():
     def init_arduino ():
@@ -356,7 +349,7 @@ class Procesos:
         self.pla_red = pla_face
 
     def detector_de_cara( video, dibujar= True):
-        face_classifier = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
+        face_classifier = cv2.CascadeClassifier(cv2.data + "haarcascade_frontalface_default.xml")
         gray_image = cv2.cvtColor(video, cv2.COLOR_BGR2GRAY)
         faces = face_classifier.detectMultiScale(gray_image, 1.7, 5, minSize=(40, 40))
         if dibujar:
@@ -620,7 +613,16 @@ class Animaciones:
         
         cv2.destroyAllWindows()
 
+def pulsa(tecla):
+	pass
 
+def suelta(tecla):
+    
+    if tecla == kb.KeyCode.from_char('q'):
+        print("se cierra el proghrama")
+        exit()
+    if tecla == kb.KeyCode.from_char('p'):
+        estado = 1
 
 
         
@@ -725,6 +727,7 @@ if __name__ == "__main__":
     
     while escuchador.is_alive():
         
+        
         animador.bucle_striming_maxc(1,1)
         
         
@@ -732,7 +735,8 @@ if __name__ == "__main__":
         animador.captura_fotos(evento)
         
         proceso.pdf(evento)
-        proceso.imprimir(evento)
+        if estado == 1:
+            proceso.imprimir(evento)
 
         if opcion == '1':
             proceso.plantilla_face(evento)
