@@ -559,7 +559,7 @@ class Animaciones:
                     cv2.imshow('video cap', suma)
                     if tiempoTranscurrido2.seconds >= 3:
                         tiempoTranscurrido2 = 0
-                        arduino.write(b'1')
+                        #arduino.write(b'1')
                         tiempoA2 = dt.datetime.now()
                         print("tiempo final 2:",tiempoA2)
                         
@@ -622,7 +622,9 @@ def suelta(tecla):
         print("se cierra el proghrama")
         exit()
     if tecla == kb.KeyCode.from_char('p'):
-        estado = 1
+        print(f"el estado anterior es {estado}")
+        estado = ~estado
+        print(f"el estado actual es {estado}")
 
 
         
@@ -720,7 +722,7 @@ if __name__ == "__main__":
     escuchador = kb.Listener(pulsa, suelta)
     escuchador.start()
 
-    
+    estado = True
 
     animador.video(30)
     evento = 0
