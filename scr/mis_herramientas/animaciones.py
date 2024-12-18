@@ -1,6 +1,11 @@
 import cv2
 from pynput import keyboard as kb
 import serial
+import datetime as dt
+import os
+import time
+
+
 
 
 
@@ -13,18 +18,20 @@ def suelta(tecla):
         print("se cierra el proghrama")
         exit()
     if tecla == kb.KeyCode.from_char('p'):
-        print("se presiono p")
-        # print(f"el estado anterior es {estado}")
-        # estado = ~estado
-        # print(f"el estado actual es {estado}")
+        return 1
+    if tecla == kb.KeyCode.from_char('P'):
+        return 0
+        
+        
 
 
 escuchador = kb.Listener(pulsa, suelta)
 escuchador.start()
 
+
 def video(frame,tiempo):
     video = cv2.VideoCapture(frame)
-    print("reproduciendo: ", frame)
+    print("reproduciendo video: ", frame)
     while escuchador.is_alive():
         ret, frame = video.read()
             
@@ -50,47 +57,127 @@ def init_arduino ():
         try:
             com = input("pon el puerto com del arduino: ")
             arduino = serial.Serial(f"COM{com}", 9600)
+            time.sleep(4)
+            os.system("cls")
 
         except Exception as cabra:
             print(cabra)
         
 
 
-def bucle_striming_maxc(numero_cam,prot):
+def bucle_striming_maxc(prot):
+    
+    os.system("cls")
+    print("reproduciendo bucle de video: ",prot)
 
-        
-    
-    linea = arduino.readline()
-    respuesta = linea.decode()
-    
-    print("inicio metodo bucle: ",prot)
     while escuchador.is_alive():
         is_closed = False
         video_pro_pan = cv2.VideoCapture(prot)
-        
-            
+
         while escuchador.is_alive():
-            
-            ret_pan, frame = video_pro_pan.read()
-            video_frame = cv2.flip(video_frame,1)
-            
+
+            ret_pan, frame = video_pro_pan.read()    
                 
             if ret_pan == True:
                 cv2.namedWindow("animacion", cv2.WND_PROP_FULLSCREEN)
                 cv2.setWindowProperty("animacion", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
                 cv2.imshow("animacion",frame)
-                
-                print(respuesta)
-                if respuesta == 1 or cv2.waitKey(1)==27:
-                    is_closed= True
+
+                if cv2.waitKey(25) & 0xFF == ord('c'):
+                    os.system("cls")
+                    print("inicia trabajo")
+                    is_closed = True
                     break
-                else:pass
-                
-                cv2.waitKey(1)
-            else: break
-                
-        if is_closed:
+
+            else:break
+
+        if is_closed == True:
             break
-    print("fin metodo")
     
+    video_pro_pan.release()
     cv2.destroyAllWindows
+
+def creacion_de_carpeta(ev, direccion_envio):
+    while escuchador.is_alive():    
+        ruta_de_carpeta = f"{direccion_envio}/secion " + str(ev)
+        if not os.path.exists(ruta_de_carpeta):
+            print("carpeta creada: ", ruta_de_carpeta)
+            os.makedirs(ruta_de_carpeta)
+
+        break
+
+def captura_fotos(ev, direccion_envio, numero_de_camara, conteo_digital):
+
+        
+        creacion_de_carpeta(ev = ev, direccion_envio = direccion_envio)
+        
+        captura = cv2.VideoCapture(numero_de_camara,cv2.CAP_DSHOW)
+        print("inicio metodo captura foto")
+        for i in range(6):
+            conteo = cv2.VideoCapture(conteo_digital[i])
+            
+            tiempoA2 = dt.datetime.now()
+            tiempoA3 = dt.datetime.now()
+
+            
+            
+            while escuchador.is_alive():
+                
+                ret, imagen_conteo = conteo.read()
+                ret_2, imagen_cap = captura.read()
+                
+                
+                if ret == True:
+                    
+                    
+                    tiempoB = dt.datetime.now()
+                    tiempoTranscurrido2 = tiempoB - tiempoA2
+                    tiempoTranscurrido3 = tiempoB - tiempoA3
+                    alto, ancho, _ = imagen_conteo.shape
+                    imagen_cap = cv2.resize(imagen_cap,(ancho,alto))
+                    
+                    imagen_cap = cv2.flip(imagen_cap,1)
+
+                    
+                    
+                    suma = cv2.add(imagen_conteo,imagen_cap)
+                    
+                    
+                    
+                    cv2.namedWindow("video cap", cv2.WND_PROP_FULLSCREEN)
+                    cv2.setWindowProperty("video cap", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
+                    cv2.imshow('video cap', suma)
+                    if tiempoTranscurrido2.seconds >= 3:
+                        tiempoTranscurrido2 = 0
+                        #arduino.write(b'1')
+                        tiempoA2 = dt.datetime.now()
+                        print("tiempo de flash:")
+                        
+                        
+                    if tiempoTranscurrido3.seconds >= 4 :
+                        tiempoTranscurrido2 = 0
+                        tiempoTranscurrido3 = 0
+                        cadena = direccion_envio+ f"/secion {ev}/imagen {i}.jpg"
+                        print(f"la direccion de foto no {i+1}:",cadena)
+                        cv2.imwrite(cadena,imagen_cap)
+                        
+                        # Se debe establecer un nuevo tiempoA
+                        tiempoA2 = dt.datetime.now()
+                        tiempoA3 = dt.datetime.now()
+                    #     print("tiempo final 3:",tiempoA3)
+                        
+                        
+                        
+
+                    if cv2.waitKey(1) == 27:
+                        break
+                        
+
+                else:
+
+                    break
+
+        cv2.destroyAllWindows()    
+
+        print("fin metodo captura fotos")
+        captura.release()  

@@ -8,7 +8,7 @@ from tkinter import messagebox
 
 
 def creacion_de_evento ():
-        
+        os.system("cls")
         while True:
             letrero = """
 //                              _                   _      _                        _         
@@ -130,6 +130,11 @@ def pdf_start():
 
         return cant_fotos,list_pla
 
+def loops():
+    numero = int(input("cuantos loops deseas tener:"))
+    os.system('cls')
+    return numero
+
 def nombre_impresora():
     letrero = """  
 //                       _                    _        _         _                                               
@@ -160,9 +165,10 @@ def entrega_digital():
         [1] FOTOS 
         [2] VIDEO
         [3] FOTOS Y VIDEO
+        [4] NINGUNO DE LAS ANTERIORE
         si no desea una opcion poner otro numero 
         """
-          
+
         print(menu)
         opcion = int(input("escribe la opcion deseada: "))
         seleccion = ""
@@ -178,11 +184,15 @@ def entrega_digital():
             seleccion = "3"
             letrero = "FOTOS Y VIDEO"
             break
+        elif opcion == 4:
+            seleccion = "4"
+            letrero = "NINGUNO DE LAS ANTERIORES"
+            break
         else: 
             print("no es la opcion deseada")
             time.sleep(2)
             os.system("cls")
-            break
+            
         
     time.sleep(2)
     os.system("cls")
@@ -261,6 +271,8 @@ def mvideos_multimedia():
 
 def cant_loop():
     cant = int(input("cuantos lops deseas: "))
+    time.sleep(4)
+    os.system("cls")
     return cant
         
 
@@ -309,7 +321,8 @@ def resumen(rut_evento,num_camara,nom_de_plantillas,list_pdf,opc,let,load,protec
     print(f"        URL de impresion: {impre}\n")
 
     print(f"        URL de plantilla de face: {plan}")
-    time.sleep(2)
+    time.sleep(4)
+    os.system("cls")
 
 
 def menu_prin():
@@ -377,4 +390,5 @@ numero_de_camara = cal_camara()
 numero_de_plantillas, lista_pdf_url = pdf_start()
 opcion_d, let = entrega_digital()
 loading, protector, conteo, impresion,pla_face =mvideos_multimedia()
+cantidad = loops()
     
