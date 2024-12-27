@@ -1,3 +1,4 @@
+
 import cv2
 import os
 import time
@@ -9,6 +10,7 @@ import win32api
 from pynput import keyboard as kb
 import serial
 import datetime as dt
+
 
 from mis_herramientas import panel_de_control as pan
 from mis_herramientas import animaciones as anim
@@ -24,6 +26,8 @@ pan.opcion_d, pan.let
 pan.loading, pan.protector, pan.conteo, pan.impresion, pan.pla_face
 pan.cantidad
 evento = 0
+
+pro.actualizar()
 
 anim.init_arduino()
 
@@ -60,12 +64,14 @@ if __name__ == "__main__":
             direccion_envio = pan.ruta_de_secion,
             lista_pdf = pan.lista_pdf_url)
 
-            print(anim.modo_impresion)
+            
         
             if anim.modo_impresion:
                 pro.imprimir(ev = evento, direccion_de_envio = pan.ruta_de_secion)
 
-            else:print("la impresora esta desactivada")
+            else:
+                print("LA IMPRESORA ESTA DESACTIVADA\n\nLISTA DE IMPRESIONES NO VALIDAS ")
+                pro.impresion_no(ev=evento)
 
             pro.entrega_prod(opcion = pan.opcion_d, 
                         ev = evento)

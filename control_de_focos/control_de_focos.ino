@@ -24,7 +24,7 @@ void loop()
       
       digitalWrite(pinLED, LOW);
       digitalWrite(pinled, LOW);
-      delay(1500);
+      delay(2000);
       digitalWrite(pinLED,HIGH);
       digitalWrite(pinled,HIGH);
       

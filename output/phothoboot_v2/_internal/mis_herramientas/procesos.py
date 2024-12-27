@@ -9,12 +9,18 @@ from mis_herramientas import animaciones as anim
 from mis_herramientas import panel_de_control as pan
 
 def pdf(ev, can_plantillas,direccion_envio,lista_pdf):
-        print("inicio metodo pdf")
+        global contador
+        contador = contador + 1
+        if contador > can_plantillas-1:
+            contador = 0
+        
+        print("\t\tINICIA EL METODO DE PDF")
 
         while anim.escuchador.is_alive():
 
             # numero_al = random.randint(0,5)
-            numero_al = random.randint(0,can_plantillas-1)
+            numero_al = contador
+            print(f"SE USO LA PLANTILLA NO. {numero_al+1}")
 
             pdf = fpdf.FPDF()
             pdf.add_page()
@@ -41,12 +47,12 @@ def pdf(ev, can_plantillas,direccion_envio,lista_pdf):
             cadena = f"{direccion_envio}/secion "+ str(ev) + "/documento.pdf"
             # Guardamos el documento
             pdf.output(cadena)
-            print(f"el pdf esta guardado en {cadena}")
+            print(f"EL PDF SE GUARDO EN: {cadena}")
             break
 
 def plantilla_face(ev, direccion_de_envio,plantilla_de_face):
 
-        print("inicio metodo plantilla face")
+        print("\t\tINICIA EL METODO DE PANTILLA FACEBOOK")
 
         while anim.escuchador.is_alive():
             for k in range(6):
@@ -63,13 +69,13 @@ def plantilla_face(ev, direccion_de_envio,plantilla_de_face):
                 img_foto = cv2.cvtColor(img_foto,cv2.COLOR_BGRA2BGR)
                 cadena = f"{direccion_de_envio}/secion "+ str(ev)+ f"/imagen face no {k+1}.jpg"
                 cv2.imwrite(cadena,img_foto) 
-                print(f"direccion de la foto de face no. {k+1}: {cadena}")           
+                print(f"DIRECCION DE LA FOTO CON PLANTILLA DE FECEBBOK {k+1}: {cadena}")           
 
             break
 
 def video_face (ev, direccion_de_envio,plantilla_red):
         img_array = []
-        print("inicio metodo video face")
+        print("\t\tINICIO DEL METODO DEL VIDEO DE FECEBOOK")
         while anim.escuchador.is_alive():
             for k in range(6):
                 img_foto = cv2.imread(f"{direccion_de_envio}/secion {ev}/imagen " + str(k) + ".jpg")
@@ -94,7 +100,7 @@ def video_face (ev, direccion_de_envio,plantilla_red):
             for i in range(6):
                 video.write(img_array[i])
 
-            print(f"video ya creado y ubicado: {cadena}")
+            print(f"VIDEO YA CREADO EN: {cadena}")
             video.release()
 
             break
@@ -126,7 +132,7 @@ def entrega_prod(opcion, ev ):
                     plantilla_red = pan.pla_face)
 
 def imprimir(ev, direccion_de_envio):
-    print("inicio metodo imprimir:")
+    print("\t\tINICIA EL METODO IMPRIMIR")
     ruta_de_impresion =f"{direccion_de_envio}/secion "+ str(ev) + "/documento.pdf"
     while anim.escuchador.is_alive():
 
@@ -137,5 +143,20 @@ def imprimir(ev, direccion_de_envio):
                             '.',
                             0)
         impresora_pred = win32print.GetDefaultPrinter()
-        print(f"el pdf ya se mando a imprimir a: {impresora_pred}")
+        print(f"EL PDF YA SE MANDO A IMPRIMIR A LA IMPRESORA: {impresora_pred}")
         break
+
+def impresion_no(ev):
+    
+    file = open("imp_no_validas.txt", "a")
+    file.write(f"\nLA SECION NO. {ev} NO SE IMPRIMIO")
+    file = open("imp_no_validas.txt")
+    print(file.read())
+    file.close()
+
+contador = -1
+
+def actualizar():
+    file = open("imp_no_validas.txt", "w")
+    file.write("")
+    file.close()

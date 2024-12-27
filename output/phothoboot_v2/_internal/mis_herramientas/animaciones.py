@@ -44,7 +44,7 @@ escuchador.start()
 
 def video(frame,tiempo):
     video = cv2.VideoCapture(frame)
-    print("reproduciendo video: ", frame)
+    print("REPRODUCIENDO VIDEO: ", frame)
     while escuchador.is_alive():
         ret, frame = video.read()
             
@@ -81,7 +81,7 @@ def init_arduino ():
 def bucle_striming_maxc(prot):
     
     os.system("cls")
-    print("reproduciendo bucle de video: ",prot)
+    print("LOOP DE VIDEO: ",prot)
 
     while escuchador.is_alive():
         is_closed = False
@@ -125,7 +125,7 @@ def captura_fotos(ev, direccion_envio, numero_de_camara, conteo_digital):
         creacion_de_carpeta(ev = ev, direccion_envio = direccion_envio)
         
         captura = cv2.VideoCapture(numero_de_camara,cv2.CAP_DSHOW)
-        print("inicio metodo captura foto")
+        print("\t\tINICIA METODO DE CAPTURA DE FOTOS")
         for i in range(6):
             conteo = cv2.VideoCapture(conteo_digital[i])
             
@@ -162,7 +162,7 @@ def captura_fotos(ev, direccion_envio, numero_de_camara, conteo_digital):
                     cv2.imshow('video cap', suma)
                     if tiempoTranscurrido2.seconds >= 3:
                         tiempoTranscurrido2 = 0
-                        #arduino.write(b'1')
+                        arduino.write(b'1')
                         tiempoA2 = dt.datetime.now()
                         print("tiempo de flash:")
                         
@@ -171,7 +171,7 @@ def captura_fotos(ev, direccion_envio, numero_de_camara, conteo_digital):
                         tiempoTranscurrido2 = 0
                         tiempoTranscurrido3 = 0
                         cadena = direccion_envio+ f"/secion {ev}/imagen {i}.jpg"
-                        print(f"la direccion de foto no {i+1}:",cadena)
+                        print(f"LA DIRECCION DE LA FOTO NO. {i+1}: ",cadena)
                         cv2.imwrite(cadena,imagen_cap)
                         
                         # Se debe establecer un nuevo tiempoA
