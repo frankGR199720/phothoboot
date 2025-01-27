@@ -1,4 +1,4 @@
-
+"""
 import cv2
 import os
 import time
@@ -10,7 +10,7 @@ import win32api
 from pynput import keyboard as kb
 import serial
 import datetime as dt
-
+"""
 
 from mis_herramientas import panel_de_control as pan
 from mis_herramientas import animaciones as anim
